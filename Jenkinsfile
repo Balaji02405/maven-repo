@@ -38,7 +38,7 @@ podTemplate(label: label, containers: [
         }
 	stage('Deploy Application on K8S') {
 	    container('kubectl') {
-		withKubeConfig([credentialsId: 'KUBEADMIN', serverUrl: 'https://172.25.4.66:8443', namespace: 'balajijenkins']) {
+		withKubeConfig([credentialsId: 'KUBEADMIN1', serverUrl: 'https://172.25.4.66:8443', namespace: 'balajijenkins']) {
 		    sh """
 			kubectl run webapp${BUILD_NUMBER} --image=balaji024/webapp2:${BUILD_NUMBER} -n balajijenkins
 			kubectl expose deploy webapp${BUILD_NUMBER} --port=8080 --target-port=8080 --type=NodePort --name=webapp${BUILD_NUMBER} -n balajijenkins
