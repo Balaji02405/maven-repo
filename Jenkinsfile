@@ -11,7 +11,7 @@ podTemplate(label: label, containers: [
   ) {
     node(label) {
         stage('Git pull code') {
-            git 'https://github.com/pktanksali/maven-project.git'
+            git 'https://github.com/balaji024/maven-project.git'
         }
         stage('Build Maven project') {
             container('maven') {
@@ -26,8 +26,8 @@ podTemplate(label: label, containers: [
                     passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
                     sh """
                         docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-                        docker build -t pktanksali/webapp:${BUILD_NUMBER} .
-                        docker push pktanksali/webapp:${BUILD_NUMBER}
+                        docker build -t balaji024/webapp2:${BUILD_NUMBER} .
+                        docker push balaji024/webapp2:${BUILD_NUMBER}
                         """
                     }
             }
@@ -38,10 +38,10 @@ podTemplate(label: label, containers: [
         }
 	stage('Deploy Application on K8S') {
 	    container('kubectl') {
-		withKubeConfig([credentialsId: 'KUBEADMIN', serverUrl: 'https://172.25.4.66:8443', namespace: 'testjenkins']) {
+		withKubeConfig([credentialsId: 'KUBEADMIN', serverUrl: 'https://172.25.4.66:8443', namespace: 'balajijenkins']) {
 		    sh """
-			kubectl run webapp${BUILD_NUMBER} --image=pktanksali/webapp:${BUILD_NUMBER} -n testjenkins
-			kubectl expose deploy webapp${BUILD_NUMBER} --port=8080 --target-port=8080 --type=NodePort --name=webapp${BUILD_NUMBER} -n testjenkins
+			kubectl run webapp${BUILD_NUMBER} --image=balaji024/webapp2:${BUILD_NUMBER} -n balajijenkins
+			kubectl expose deploy webapp${BUILD_NUMBER} --port=8080 --target-port=8080 --type=NodePort --name=webapp${BUILD_NUMBER} -n balajijenkins
 			"""
 		}
 	    }
