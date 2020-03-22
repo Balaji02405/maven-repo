@@ -11,7 +11,7 @@ podTemplate(label: label, containers: [
   ) {
     node(label) {
         stage('Git pull code') {
-            git 'https://github.com/balaji024/maven-project.git'
+            git 'https://github.com/Balaji02405/maven-repo.git'
         }
         stage('Build Maven project') {
             container('maven') {
@@ -42,6 +42,8 @@ podTemplate(label: label, containers: [
 		    sh """
 			kubectl run webapp${BUILD_NUMBER} --image=balaji024/webapp2:${BUILD_NUMBER} -n balajijenkins
 			kubectl expose deploy webapp${BUILD_NUMBER} --port=8080 --target-port=8080 --type=NodePort --name=webapp${BUILD_NUMBER} -n balajijenkins
+			kubectl run webapp2${BUILD_NUMBER} --image=balaji024/webapp2:${BUILD_NUMBER} -n balajijenkins
+			kubectl expose deploy webapp2${BUILD_NUMBER} --port=8080 --target-port=8080 --type=NodePort --name=webapp${BUILD_NUMBER} -n balajijenkins
 			"""
 		}
 	    }
